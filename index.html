@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<!--
+Student: Simon McNeil <mcneils@sheridan.desire2learn.com>
+StudentID: 991426860
+Course: PROG20261
+Project: Assignment1
+-->
+<html>
+    <head>
+        <title>Assignment1</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" href="data;;base64,iVBORw0KGgo=">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        
+        <!-- The following block of code are CSS styles -->
+        
+        <style>
+            .blueButton{
+                background-color: #267FFF;
+                border: 1px;
+                width: 100px;
+                height: 30px;
+                display:inline-block;
+	            cursor:pointer;
+            	color:#ffffff;
+            	font-family:Arial;
+            	font-size:15px;
+            }
+            .blueButton:hover{
+                background-color: #3B76CB;
+            }
+            .redButton{
+                background-color: #FE3535;
+                border: 1px;
+                width: 100px;
+                height: 30px;
+                display:inline-block;
+	            cursor:pointer;
+            	color:#ffffff;
+            	font-family:Arial;
+            	font-size:15px;
+            }
+            .redButton:hover{
+                background-color: #CB3B3B;
+            }
+            #number{
+                color:white;
+                position: relative;
+                float: left;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                }
+            #removeBlue{
+                background-color: #787777;
+                border: 1px;
+                width: 110px;
+                height: 30px;
+                display:inline-block;
+	            cursor:pointer;
+            	color:#ffffff;
+            	font-family:Arial;
+            	font-size:15px;
+            }
+            #removeBlue:hover{
+                background-color: #8E8C8C;
+            }
+            #removeRed{
+                background-color: #787777;
+                border: 1px;
+                width: 110px;
+                height: 30px;
+                display:inline-block;
+	            cursor:pointer;
+            	color:#ffffff;
+            	font-family:Arial;
+            	font-size:15px;
+            }
+            #removeRed:hover{
+                background-color: #8E8C8C;
+            }
+            #removeAll{
+                background-color: #787777;
+                border: 1px;
+                width: 110px;
+                height: 30px;
+                display:inline-block;
+	            cursor:pointer;
+            	color:#ffffff;
+            	font-family:Arial;
+            	font-size:15px;
+            }
+            #removeAll:hover{
+                background-color: #8E8C8C;
+            }
+        </style>
+        
+    </head>
+   <body>
+       
+        <!-- The following 5 Buttons Create a top menu bar -->
+        <button id="addBlue" value="blue" class="blueButton">Add Blue</button>
+        <button id="addRed" value="red" class="redButton">Add Red</button>
+        <button id="removeBlue" value="blue">Remove Blue</button>
+        <button id="removeRed" value="red">Remove Red</button>
+        <button id="removeAll" value="all">Remove All</button>
+
+	<!-- Remember: you can only modify code inside <style></style> and code inside <script></script> below. --> 
+       
+         <script type="text/javascript">
+            
+          $(document).ready(function(){
+              
+                //counters to keep track of numbers within the dive
+                var blueCounter = 0;
+                var redCounter = 0;
+                
+                //the following is a regular expression to check if html params are inserted
+                var params={};
+                    window.location.search
+                    .replace(/[?&]+([^=&]+)=([^&]*)/gi, function(str,key,value) {
+                    params[key] = value;
+                  }
+                );
+                
+                var name = params['name'];
+                var id = params['id'];
+                console.log(name);
+                console.log(id);
+                
+                
+                var nameParam = $('<p>id=paraName</p>').text("User Name: "+name);
+                var userIdParam = $('<p>id=paramId</p>').text("User ID: "+id);
+                
+                //if params exists they will display below the menu bar
+                //if they do not then they will not display
+                if(typeof name!=="undefined" && typeof id!=="undefined"){
+                    $("body").append(nameParam,userIdParam);
+                }
+                
+                //The following 5 functions are jquery elements to do certain things
+                //When a certain button is clicked. I knows which button is clicked due to its class name identification
+                $("#addBlue").click(function(){
+                    var colorBlue = '#030AFF';   
+                    ++blueCounter;
+                    createBox(colorBlue,blueCounter);
+                });
+           
+                $("#addRed").click(function(){
+                    var colorRed = '#EE0000';   
+                    ++redCounter;
+                    createBox(colorRed,redCounter);
+                });
+           
+                $("#removeBlue").click(function(){
+                    var blueTag = 'blueBox'+blueCounter;
+                    //removes the red box dives.
+                    var blueElems = $(document.getElementById(blueTag));
+                    
+                    //removes the red box dives.
+                    if(blueCounter > 0) {
+                        $(blueElems).fadeOut(150, function(){ $(this).remove();});
+                        --blueCounter;
+                    }
+                });
+           
+                $("#removeRed").click(function(){
+                    var redTag = 'redBox'+redCounter;
+                    
+                    //removes the red box dives.
+                    var redElems = $(document.getElementById(redTag));
+                    
+                    //removes the red box dives. 
+                    if(redCounter > 0) {
+                        $(redElems).fadeOut(150, function(){ $(this).remove();});
+                        --redCounter;
+                    }
+                });
+          
+                $("#removeAll").click(function(){
+                    var removeDiv = document.getElementsByTagName("div");
+                    
+                    //removes all div elements
+                    while(removeDiv[0]){
+                        removeDiv[0].parentNode.removeChild(removeDiv[0]);
+                    }
+                    redCounter = 0;
+                    blueCounter = 0;
+                });
+            
+                //the following javascript function creates the div box with
+                //parameters of background color and number.
+               function createBox(backgroundColor,num){
+                    
+                    //identifies the square size of the box
+                    var width = ((Math.random()*100) + 20).toFixed();
+                    
+                    //the following makes sure that the font number size inside the box is half of the size
+                    var textSize = width * .5;
+                    
+                    //Creates a random position to display the div box
+                    var posx = (Math.random() * ($(document).width() - width - 10)).toFixed();
+                    var posy = (Math.random() * ($(document).width() - $(document).width() * .63)).toFixed();
+                    var color = backgroundColor;
+                    
+                    //two conditional statements to check which background color needs to be applied. 
+                    if(backgroundColor=='#030AFF'){
+                        
+                        //the following car are to keep track of each individual div box
+                        var number = $('<div id="number">'+num+'</div>');
+                        var blueID = 'blueBox'+num;
+                        
+                        //creates a a div elelement with all the necessary styles inside. 
+                        var blueDiv = $('<div id='+blueID+'></div>').css({
+                        'width':width+'px',
+                        'height':width+'px',
+                        'background-color': color,
+                        'position':'absolute',
+                        'border-style':'solid',
+                        'border-width':'2px',
+                        'margin-top':'110px',
+                        'left':posx+'px',
+                        'font-size':textSize+'px',
+                        'top':posy+'px',
+                    }).hide().appendTo('body').append(number).fadeIn(500); //adds the box to the body with a certain style.
+                    
+                }
+                    //same thing as the above conditional expression
+                    else if(backgroundColor=='#EE0000'){
+                        var number = $('<div id="number">'+num+'</div>');
+                        var redID = 'redBox'+num;
+                
+                        var redDiv = $('<div id='+redID+'></div>').css({
+                        'width':width+'px',
+                        'height':width+'px',
+                        'background-color': color,
+                        'position':'absolute',
+                        'border-style':'solid',
+                        'border-width':'2px',
+                        'margin-top':'110px',
+                        'left':posx+'px',
+                        'font-size':textSize+'px',
+                        'top':posy+'px',
+                    }).hide().appendTo('body').append(number).fadeIn(500);
+                }
+           }
+          });
+        </script>
+   </body>
+</html>
